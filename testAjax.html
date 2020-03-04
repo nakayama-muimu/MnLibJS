@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="jp">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Ajax.js テスト</title>
+    <script src="Ajax.js"></script>
+    <script>
+(function(){"use strict"
+    window.addEventListener("load", cbLoad);
+
+    function cbLoad(){
+        /*
+        var ajax = new window.Ajax();
+        var sURL = window.Ajax.getMyURL();
+        ajax.get(sURL + "LICENSE", "a=1", function(rslt){
+            alert(rslt);
+        },function(){
+            console.log(Date.now());
+        });
+        */
+        
+        var evPress = ("ontouchend" in window) ? "touchend" : "click";
+
+        gebi("button01").addEventListener(evPress, function(){
+            var ajax = new window.Ajax();
+            var val = gebi("input01").value;
+            var sURL = window.Ajax.getMyURL() + "test_server.php";
+            ajax.get(sURL, "val=" + val, function(rslt){
+                var s = window.Ajax.escapeHTML(rslt);
+                console.log(s);
+                s = s.replace(/\n/g, "<br>\n");
+                console.log(s);
+                gebi("result01").innerHTML = s;
+            });
+        });
+
+        gebi("button02").addEventListener(evPress, function(){
+            var ajax = new window.Ajax();
+            var val = gebi("input02").value;
+            var sURL = window.Ajax.getMyURL() + "test_server.php";
+            ajax.post(sURL, "val=" + val, function(rslt){
+                var s = window.Ajax.escapeHTML(rslt);
+                console.log(s);
+                s = s.replace(/\n/g, "<br>\n");
+                console.log(s);
+                gebi("result02").innerHTML = s;
+            });
+
+        });
+        gebi("button03").addEventListener(evPress, function(){
+        var ajax = new window.Ajax();
+        var form = gebi("form03");
+        var fd = new FormData(form);
+        var sURL = window.Ajax.getMyURL() + "test_server.php";
+        ajax.postFile(sURL, fd, function(rslt){
+            var s = window.Ajax.escapeHTML(rslt);
+                console.log(s);
+                s = s.replace(/\n/g, "<br>\n");
+                console.log(s);
+                gebi("result03").innerHTML = s;
+            });
+        });
+    }
+
+
+    function gebi(id){
+        return document.getElementById(id);
+    }
+}())
+    </script>
+</head>
+<body>
+<h3>Ajax.get()</h3>
+val:<input id="input01"><br>
+<button type="button" id="button01">実行</button><br>
+結果:<br>
+<div id="result01"></div>
+
+<h3>Ajax.post()</h3>
+val:<input id="input02"><br>
+<button type="button" id="button02">実行</button><br>
+結果:<br>
+<div id="result02"></div>
+
+<h3>Ajax.postFile()</h3>
+<form id="form03">
+    <input id="input03" type="file" name="fn03"><br>
+</form>
+<button type="button" id="button03">アップロード</button><br>
+結果:<br>
+<div id="result03"></div>
+
+</body>
+</html>
